@@ -15,24 +15,33 @@ import {
 
 import { 
   BarChart as BarChartIcon, 
-  Database as DatabaseIcon, 
+  Upload as UploadIcon, 
   Settings as SettingsIcon, 
   ArrowLeft as ArrowLeftIcon,
   ArrowRight as ArrowRightIcon,
-  BarChart2 as BarChart2Icon,
-  UserCircle as UserCircleIcon
+  Users as UsersIcon,
+  LogOut as LogOutIcon
 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
-export function SideNav() {
+export function AdminNav() {
   const sidebar = useSidebar();
-  const [activeItem, setActiveItem] = useState("dashboard");
+  const [activeItem, setActiveItem] = useState("datasets");
+  const { logout } = useAuth();
+  const navigate = useNavigate();
 
   const menuItems = [
-    { id: "dashboard", title: "Dashboard", icon: BarChartIcon },
-    { id: "inventory", title: "Inventory", icon: DatabaseIcon },
-    { id: "forecasting", title: "Forecasting", icon: BarChart2Icon },
+    { id: "datasets", title: "Datasets", icon: UploadIcon },
+    { id: "models", title: "Models", icon: BarChartIcon },
+    { id: "users", title: "Users", icon: UsersIcon },
     { id: "settings", title: "Settings", icon: SettingsIcon }
   ];
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   return (
     <Sidebar className={sidebar.collapsed ? "w-14" : "w-64"} collapsible>
@@ -42,13 +51,13 @@ export function SideNav() {
 
       <SidebarContent className="mt-2">
         <div className={`mb-8 pl-4 ${sidebar.collapsed ? "text-center pl-0" : ""}`}>
-          {!sidebar.collapsed && <h2 className="text-lg font-bold text-primary">SupplySight</h2>}
-          {sidebar.collapsed && <span className="text-lg font-bold text-primary">SS</span>}
+          {!sidebar.collapsed && <h2 className="text-lg font-bold text-primary">Admin Panel</h2>}
+          {sidebar.collapsed && <span className="text-lg font-bold text-primary">AP</span>}
         </div>
         
         <SidebarGroup>
           <SidebarGroupLabel className={sidebar.collapsed ? "sr-only" : ""}>
-            Navigation
+            Administration
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
@@ -64,12 +73,19 @@ export function SideNav() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup className="mt-auto border-t pt-4">
+          <SidebarGroupContent>
+            <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton 
-                  className="mt-auto text-red-500 hover:bg-sidebar-accent/50"
-                  onClick={() => window.location.href = '/login'}
+                  className="text-red-500 hover:bg-sidebar-accent/50"
+                  onClick={handleLogout}
                 >
-                  <UserCircleIcon className="mr-2 h-5 w-5" />
+                  <LogOutIcon className="mr-2 h-5 w-5" />
                   {!sidebar.collapsed && <span>Log Out</span>}
                 </SidebarMenuButton>
               </SidebarMenuItem>

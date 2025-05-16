@@ -1,7 +1,8 @@
 
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { RefreshCw, Download } from "lucide-react";
+import { RefreshCw, Download, UserCircle } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 interface DashboardHeaderProps {
   onRefresh: () => void;
@@ -9,6 +10,7 @@ interface DashboardHeaderProps {
 
 export function DashboardHeader({ onRefresh }: DashboardHeaderProps) {
   const { toast } = useToast();
+  const { user } = useAuth();
   
   const handleExportData = () => {
     toast({
@@ -20,7 +22,15 @@ export function DashboardHeader({ onRefresh }: DashboardHeaderProps) {
   return (
     <div className="flex justify-between items-center mb-6">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Inventory Forecast Dashboard</h1>
+        <div className="flex items-center gap-2">
+          <h1 className="text-3xl font-bold tracking-tight">Inventory Forecast Dashboard</h1>
+          {user && (
+            <div className="ml-2 flex items-center text-sm text-muted-foreground">
+              <UserCircle className="h-4 w-4 mr-1" />
+              <span>{user.name}</span>
+            </div>
+          )}
+        </div>
         <p className="text-muted-foreground">
           Track inventory levels and predict future demand
         </p>

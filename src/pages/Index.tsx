@@ -9,6 +9,8 @@ import { InventoryTable } from "@/components/InventoryTable";
 import { DataUploadForm } from "@/components/DataUploadForm";
 import { products, ProductForecast, getSummaryMetrics } from "@/lib/mockData";
 import { getForecastsForAllProducts } from "@/lib/mockForecasting";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const Index = () => {
   const [forecasts, setForecasts] = useState<ProductForecast[]>([]);
@@ -19,6 +21,12 @@ const Index = () => {
     averageDemand: 0
   });
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+
+  // Redirect if not authenticated
+  if (!user) {
+    return <Navigate to="/login" />;
+  }
 
   const loadData = () => {
     setLoading(true);
@@ -39,7 +47,7 @@ const Index = () => {
   }, []);
 
   return (
-    <SidebarProvider collapsedWidth={56}>
+    <SidebarProvider>
       <div className="flex min-h-screen w-full bg-background">
         <SideNav />
         <div className="flex-1 overflow-y-auto">
